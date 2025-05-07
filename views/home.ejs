@@ -9,7 +9,7 @@
     <div class="side-circles">
       <a href="/characters" class="circle-button" title="Characters">Characters</a>
       <a href="/userpage" class="circle-button" title="User Profile">User</a>
-      <a href="/" class="circle-button" title="Login">Login</a>
+      <a href="/logout" class="circle-button" title="Logout">Logout</a>
     </div>
 
    
@@ -31,7 +31,7 @@
                 <%  })%>
             </ul>
 
-            <form action="/play" method="POST">
+            <!-- <form action="/play" method="POST">
               <input type="hidden" name="circleIndex" value="<%= index %>" />
               <input type="hidden" name="game" value="<%= circles %>" />
               <select name="action" required>
@@ -41,7 +41,19 @@
                 <option value="invite">Invite to Event</option>
               </select>
               <button type="submit">Go!</button>
+            </form> -->
+            
+            <!-- instead of a drop down, i added buttons that submit as you click them -->
+            <form action="/play" method="POST">
+              <input type="hidden" name="circleIndex" value="<%= index %>" />
+              <input type="hidden" name="game" value="<%= circles %>" />
+            
+              <button type="submit" name="action" value="compliment">Give Compliment</button>
+              <button type="submit" name="action" value="help">Offer Help</button>
+              <button type="submit" name="action" value="invite">Invite to Event</button>
             </form>
+            
+            
           </div>
         <% } %>
       </div>

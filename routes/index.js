@@ -6,11 +6,29 @@ var session = require('express-session');
 const bcrypt = require('bcrypt');
 const code = require('../js/code.js');
 
+const schedule = require('node-schedule');
+
+
 //function so people cant just type endpoints for user-only pages, e.g. user profile
 function isAuthenticated (req, res, next) {
   if (req.session.username) next()
   else next('route')
 }
+
+//function to remove old data( >two weeks) from leaderboard
+function removeolddata() {
+    let sql = 'DELETE FROM leaderboard WHERE DatePlayed < now() - INTERVAL 14 day'
+    db.query(sql,(err,result) => {
+      if (err){ 
+        throw err;
+      } else {
+        console.log('this is what you asked for heavy is the crown')
+      }
+    })
+}
+
+//schedules to remove old( >two weeks) leaderboard data on sunday 00:00 
+const job = schedule.scheduleJob('****7', removeolddata);
 
 // Handle user registration
 router.post('/register', (req, res) => {
@@ -296,6 +314,17 @@ router.get('/characters/:charID', (req, res) => {
     if (err) throw err;
     var row = result[0];
     res.render('character_page', { title: 'Character Page', character: row, user: req.session.username});
+  });
+});
+
+
+router.get('/logout', (req,res)=>{
+  req.session.destroy(err =>{
+    if (err){
+      (console.error('logout err:',err))
+      return res.redirect('/home');
+    }
+    res.redirect('/');
   });
 });
 
